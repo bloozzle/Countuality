@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import uk.co.bloozzle.counter.CounterModel
 import uk.co.bloozzle.counter.CounterModelObserver
 import uk.co.bloozzle.counter.usecases.IncrementCounter
+import uk.co.bloozzle.counter.usecases.ResetCounter
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         val counterModel = CounterModel()
         val incrementCounter = IncrementCounter(counterModel)
+        val resetCounter = ResetCounter(counterModel)
 
         val counterModelObserver = object:CounterModelObserver {
             override fun updateCount(currentCount: Int) {
@@ -35,6 +37,12 @@ class MainActivity : AppCompatActivity() {
         count_container.setOnClickListener {
             incrementCounter.execute()
         }
+
+        count_container.setOnLongClickListener (object:View.OnLongClickListener {
+            override fun onLongClick(v: View?): Boolean {
+            resetCounter.execute()
+                return true
+        }})
 
 
     }
