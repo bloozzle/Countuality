@@ -1,12 +1,16 @@
 package uk.co.bloozzle.countuality
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
+import uk.co.bloozzle.counter.CounterModel
+import uk.co.bloozzle.counter.CounterModelObserver
+import uk.co.bloozzle.counter.usecases.IncrementCounter
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,6 +18,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+
+        val counterModel = CounterModel()
+        val incrementCounter = IncrementCounter(counterModel)
+
+        val counterModelObserver = object:CounterModelObserver {
+            override fun updateCount(currentCount: Int) {
+                count.text = currentCount.toString()
+            }
+
+        }
+
+        counterModel.modelObserver = counterModelObserver
+
+        count_container.setOnClickListener {
+            incrementCounter.execute()
+        }
+
 
     }
 
